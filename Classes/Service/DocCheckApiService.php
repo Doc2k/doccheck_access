@@ -15,9 +15,9 @@ final class DocCheckApiService
      */
     public function buildAuthorizationUrl(array $configuration = []): string
     {
-        $authorizationEndpoint = (string)($configuration['authorizationEndpoint'] ?? 'https://auth.doccheck.com/de/authorize');
+        $authorizationEndpoint = (string)($configuration['authorizationEndpoint'] ?? 'https://auth.doccheck.com/en/authorize');
         $clientId = (string)($configuration['clientId'] ?? '');
-        $redirectUri = (string)($configuration['redirectUri'] ?? '');
+        $redirectUri = (string)($configuration['callbackPath'] ?? '');
 
         return $authorizationEndpoint
             . '?grant_type=authorization_code'
@@ -84,4 +84,5 @@ final class DocCheckApiService
 
         return hash_equals($expectedState, $state);
     }
+
 }

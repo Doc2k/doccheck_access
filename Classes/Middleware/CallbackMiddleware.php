@@ -41,6 +41,8 @@ final class CallbackMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
+        $this->configurationService->assertRequiredAdminConfiguration();
+
         $queryParams = $request->getQueryParams();
         $code = isset($queryParams['code']) && is_scalar($queryParams['code']) ? (string)$queryParams['code'] : '';
         $sessionData = $this->getSessionData($request);
@@ -71,6 +73,7 @@ final class CallbackMiddleware implements MiddlewareInterface
         $successPid = isset($sessionData['successPid']) && is_numeric($sessionData['successPid'])
             ? (int)$sessionData['successPid']
             : $this->configurationService->getSuccessPid();
+        $this->configurationService->assertSuccessPidAvailable($successPid);
 
         return new RedirectResponse($this->buildPageRedirectUrl($successPid, $languageId), 303);
     }

@@ -27,7 +27,7 @@ final class ConfigurationService
 
     public function getCallbackPath(): string
     {
-        return $this->getStringValue('callbackPath', '/doccheck-access/callback/');
+        return $this->getStringValue('callbackPath');
     }
 
     public function getSuccessPid(): int
@@ -48,6 +48,57 @@ final class ConfigurationService
     public function getFrontendUserGroupUid(): int
     {
         return $this->getIntegerValue('frontendUserGroupUid');
+    }
+
+    public function assertRequiredAdminConfiguration(): void
+    {
+        if (trim($this->getClientId()) === '') {
+            throw new \RuntimeException(
+                'DocCheck Access configuration error: clientId is missing.',
+                1719001001
+            );
+        }
+
+        if (trim($this->getClientSecret()) === '') {
+            throw new \RuntimeException(
+                'DocCheck Access configuration error: clientSecret is missing.',
+                1719001002
+            );
+        }
+
+        $redirectUri = trim($this->getConfiguredRedirectUri());
+        if ($redirectUri === '' || !$this->isValidAbsoluteHttpUri($redirectUri)) {
+            throw new \RuntimeException(
+                'DocCheck Access configuration error: redirectUri or callbackPath is missing or invalid.',
+                1719001003
+            );
+        }
+
+        if ($this->getFrontendUserUid() <= 0) {
+            throw new \RuntimeException(
+                'DocCheck Access configuration error: frontendUserUid/userId must be greater than 0.',
+                1719001004
+            );
+        }
+
+        if ($this->getFailurePid() <= 0) {
+            throw new \RuntimeException(
+                'DocCheck Access configuration error: failurePid must be greater than 0.',
+                1719001005
+            );
+        }
+    }
+
+    public function assertSuccessPidAvailable(int $successPid): void
+    {
+        if ($successPid > 0) {
+            return;
+        }
+
+        throw new \RuntimeException(
+            'DocCheck Access configuration error: no successPid is configured globally or on the content element.',
+            1719001006
+        );
     }
 
     /**
@@ -76,5 +127,21 @@ final class ConfigurationService
         $value = $this->getAll()[$key] ?? $default;
 
         return is_numeric($value) ? (int)$value : $default;
+    }
+
+    private function getConfiguredRedirectUri(): string
+    {
+        return $this->getStringValue('callbackPath');
+    }
+
+    private function isValidAbsoluteHttpUri(string $uri): bool
+    {
+        if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
+            return false;
+        }
+
+        $scheme = parse_url($uri, PHP_URL_SCHEME);
+
+        return $scheme === 'http' || $scheme === 'https';
     }
 }

@@ -5,3 +5,7 @@ tt_content.doccheckaccess_login {
     10 = EXT:doccheck_access/Resources/Private/Templates/ContentElements/
   }
 }
+
+page.10.includeCSS{
+  deccheck = EXT:doccheck_access/Resources/Public/Css/dca.css
+}

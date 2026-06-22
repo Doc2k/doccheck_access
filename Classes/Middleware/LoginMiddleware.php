@@ -41,17 +41,7 @@ final class LoginMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $queryParams = $request->getQueryParams();
-        $contentElementUid = isset($queryParams['ce']) && is_numeric($queryParams['ce']) ? (int)$queryParams['ce'] : 0;
-        if ($contentElementUid <= 0) {
-            return new RedirectResponse($this->buildPageRedirectUrl($this->configurationService->getFailurePid()), 303);
-        }
-
-        $contentElement = $this->fetchContentElement($contentElementUid);
-        $successPid = (int)($contentElement['tx_doccheckaccess_success_pid'] ?? 0);
-        if ($successPid <= 0) {
-            $successPid = $this->configurationService->getSuccessPid();
-        }
+        $this->configurationService->assertRequiredAdminConfiguration();
 
         $language = $request->getAttribute('language');
 
@@ -67,13 +57,32 @@ final class LoginMiddleware implements MiddlewareInterface
             ? $languageCode
             : 'en';
 
+        $queryParams = $request->getQueryParams();
+        $contentElementUid = isset($queryParams['ce']) && is_numeric($queryParams['ce']) ? (int)$queryParams['ce'] : 0;
+        if ($contentElementUid <= 0) {
+            return new RedirectResponse($this->buildPageRedirectUrl($this->configurationService->getFailurePid(), $languageId), 303);
+        }
+
+        $contentElement = $this->fetchContentElement($contentElementUid);
+        if ($contentElement === []) {
+            return new RedirectResponse(
+                $this->buildPageRedirectUrl($this->configurationService->getFailurePid(), $languageId),
+                303
+            );
+        }
+
+        $successPid = (int)($contentElement['tx_doccheckaccess_success_pid'] ?? 0);
+        if ($successPid <= 0) {
+            $successPid = $this->configurationService->getSuccessPid();
+        }
+        $this->configurationService->assertSuccessPidAvailable($successPid);
+
         $this->storeSessionData($request, [
             'contentElementUid' => $contentElementUid,
             'successPid' => $successPid,
             'languageId' => $languageId,
             'languageCode' => $docCheckLanguage,
         ]);
-
 
         $configuration = $this->configurationService->getAll();
         $configuration['authorizationEndpoint'] = 'https://auth.doccheck.com/' . $docCheckLanguage . '/authorize';
@@ -143,7 +152,7 @@ final class LoginMiddleware implements MiddlewareInterface
         return null;
     }
 
-    private function buildPageRedirectUrl(int $pageUid): string
+    private function buildPageRedirectUrl(int $pageUid, int $languageId = 0): string
     {
         if ($pageUid <= 0) {
             return '/';
@@ -151,9 +160,13 @@ final class LoginMiddleware implements MiddlewareInterface
 
         try {
             $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageUid);
-            return (string)$site->getRouter()->generateUri($pageUid);
+
+            return (string)$site->getRouter()->generateUri(
+                $pageUid,
+                ['_language' => $languageId]
+            );
         } catch (\Throwable $e) {
-            return '/?id=' . $pageUid;
+            return '/?id=' . $pageUid . ($languageId > 0 ? '&L=' . $languageId : '');
         }
     }
 }
