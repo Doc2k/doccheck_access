@@ -1,91 +1,126 @@
 # DocCheck Access
 
-TYPO3 extension for DocCheck-based frontend access.
+DocCheck Access is a lightweight TYPO3 extension that provides DocCheck OAuth authentication for frontend access.
 
-## Purpose
+The extension was created as a simple replacement for the former DocCheck Access Basic integration and focuses on one specific use case:
 
-This extension provides DocCheck login handling without Extbase plugins or a backend module. It uses TYPO3 content elements, PSR-15 middlewares, Fluid templates and small service classes.
+> Authenticate users via DocCheck and grant access to protected TYPO3 content using a predefined frontend user.
 
-## TYPO3 Versions
+The implementation is intentionally lightweight and avoids unnecessary complexity. It uses TYPO3 frontend sessions, PSR-15 middlewares and standard TYPO3 content elements without requiring Extbase plugins or backend modules.
 
-The extension targets TYPO3 11.5 LTS through TYPO3 14.x. It intentionally keeps the classic TYPO3 integration available and does not require Site Sets.
+## Features
+
+* DocCheck OAuth authentication
+* TYPO3 frontend user login
+* Language-aware login and redirect handling
+* Configurable success and failure pages
+* Session-based error handling
+* Content elements for login and error output
+* TYPO3 11.5 LTS to TYPO3 14 compatibility
+
+## Scope and Limitations
+
+This extension authenticates users through DocCheck and logs in a predefined TYPO3 frontend user.
+
+The extension does **not**:
+
+* create frontend users automatically
+* synchronize DocCheck user data
+* manage frontend user accounts
+* map DocCheck roles or permissions
+* import user profiles
+
+If your project requires individual TYPO3 frontend users, profile synchronization or role mapping, a custom integration should be considered instead.
+
+## Installation
+
+Install the extension via Composer:
+
+```bash
+composer require doc2k/doccheck-access
+```
+
+Activate the extension in TYPO3 and execute the database compare to add the required database fields.
+
+## Configuration
+
+Open the TYPO3 Extension Configuration and provide the required DocCheck credentials and TYPO3 settings.
+
+### Required Settings
+
+| Setting           | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| Client ID         | DocCheck OAuth Client ID                       |
+| Client Secret     | DocCheck OAuth Client Secret                   |
+| Callback URL      | Registered DocCheck callback URL               |
+| Failure Page      | TYPO3 page shown when authentication fails     |
+| Frontend User UID | TYPO3 frontend user used for successful logins |
+
+### Optional Settings
+
+| Setting                 | Description                            |
+| ----------------------- | -------------------------------------- |
+| Success Page            | Global fallback success page           |
+| Frontend User Group UID | Reserved for future use                |
+| Token Endpoint          | Alternative token endpoint if required |
+
+A success page can be configured globally or individually on each login content element. The content element configuration always takes precedence.
 
 ## Content Elements
 
 ### DocCheck Login
 
-`doccheckaccess_login` renders a DocCheck login button. The button points to the internal login route:
+Displays a login button that starts the DocCheck authentication process.
 
-```text
-/doccheck-access/login/?ce={contentElementUid}
-```
+Available fields:
 
-For translated content elements, the localized content element UID is used. This allows each language version of the login element to define its own success page.
-
-Fields:
-
-- Standard TYPO3 header fields
-- Button Label
-- Success Page
-- Standard Appearance, Language, Access, Categories and Notes tabs
+* Header
+* Button Label
+* Success Page
+* Standard TYPO3 Appearance, Access and Language settings
 
 ### DocCheck Error Message
 
-`doccheckaccess_error_message` renders the latest DocCheck error message from the frontend session. It is rendered uncached so session-based messages do not get stuck in the page cache.
+Displays the most recent DocCheck authentication error stored in the frontend session.
 
-## Flow
+The content element is rendered uncached to ensure session-based messages are displayed correctly.
 
-1. The login button calls `/doccheck-access/login/?ce=...`.
-2. `LoginMiddleware` validates required admin configuration.
-3. The middleware reads the login content element and determines the success page.
-4. The selected success page, current language and DocCheck language are stored in the TYPO3 frontend session.
-5. The user is redirected to the DocCheck authorization URL.
-6. DocCheck returns to the configured callback URL `/doccheck-access/callback/`.
-7. `CallbackMiddleware` exchanges the returned code for a token.
-8. A configured frontend user is logged in.
-9. The user is redirected to the language-aware success page or failure page.
+## Authentication Flow
 
-DocCheck does not receive a TYPO3 state parameter. The required TYPO3 context is kept in the frontend session.
+1. A visitor clicks the DocCheck login button.
+2. TYPO3 stores the current language and target page in the frontend session.
+3. The visitor is redirected to DocCheck.
+4. DocCheck redirects back to the configured callback URL.
+5. TYPO3 exchanges the authorization code for an access token.
+6. The configured frontend user is logged in.
+7. The visitor is redirected to the configured success page.
 
-## Configuration
+If the authentication process fails, the visitor is redirected to the configured failure page.
 
-Configure the extension in TYPO3 extension configuration:
+## Error Handling
 
-- `clientId`
-- `clientSecret`
-- `callbackPath`
-- `successPid`
-- `failurePid`
-- `frontendUserUid`
-- `frontendUserGroupUid`
-- `tokenEndpoint`
+Configuration problems are treated as installation errors and will raise a `RuntimeException`.
 
-`successPid` can be configured globally or per login content element. The per-element success page takes precedence.
+Examples include:
 
-Required admin configuration errors throw `RuntimeException` with explicit error codes. They are not converted into frontend messages.
+* missing Client ID
+* missing Client Secret
+* missing Callback URL
+* invalid frontend user configuration
+* missing failure page
 
-## Frontend Errors
+Authentication-related problems are stored in the TYPO3 frontend session and can be displayed using the **DocCheck Error Message** content element.
 
-Non-admin login failures are stored in the frontend session under:
+Current error codes:
 
-```text
-doccheck_access_error
-```
+* `missing_code`
+* `token_exchange_failed`
+* `frontend_login_failed`
+* `missing_content_element`
+* `invalid_content_element`
 
-The error message content element reads the code, maps it to a fixed English message and deletes the session value afterwards.
+## Technical Notes
 
-Supported codes:
+The extension stores TYPO3-specific context such as language and target page information in the frontend session during the authentication process.
 
-- `missing_code`
-- `token_exchange_failed`
-- `frontend_login_failed`
-- `missing_content_element`
-- `invalid_content_element`
-
-## Installation
-
-Install the Composer package `doc2k/doccheck-access` and activate the extension key `doccheck_access`.
-
-Run the TYPO3 database compare to add the extension fields to `tt_content`.
-
-No changes outside the extension are required by this package.
+No TYPO3-specific state information is transmitted to DocCheck.
