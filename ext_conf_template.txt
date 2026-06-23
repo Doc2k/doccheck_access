@@ -4,8 +4,7 @@ clientId =
 # cat=basic; type=password; label=DocCheck Client Secret
 clientSecret =
 
-
-# cat=paths; type=string; label=Callback path
+# cat=basic; type=string; label=Callback path
 callbackPath = yourdomain.de/doccheck-access/callback/
 
 # cat=redirects; type=int+; label=Default success page uid
@@ -19,6 +18,65 @@ frontendUserUid = 0
 
 # cat=feuser; type=int+; label=FE-Usergroup ID
 frontendUserGroupUid = 0
+
+# cat=DE; type=string; label=Client ID override DE
+de_clientId =
+
+# cat=DE; type=password; label=Client Secret override DE
+de_clientSecret =
+
+# cat=DE; type=string; label=Callback path override DE
+de_callbackPath =
+
+
+# cat=EN; type=string; label=Client ID override EN
+en_clientId =
+
+# cat=EN; type=password; label=Client Secret override EN
+en_clientSecret =
+
+# cat=EN; type=string; label=Callback path override EN
+en_callbackPath =
+
+
+# cat=FR; type=string; label=Client ID override FR
+fr_clientId =
+
+# cat=FR; type=password; label=Client Secret override FR
+fr_clientSecret =
+
+# cat=FR; type=string; label=Callback path override FR
+fr_callbackPath =
+
+
+# cat=ES; type=string; label=Client ID override ES
+es_clientId =
+
+# cat=ES; type=password; label=Client Secret override ES
+es_clientSecret =
+
+# cat=ES; type=string; label=Callback path override ES
+es_callbackPath =
+
+
+# cat=IT; type=string; label=Client ID override IT
+it_clientId =
+
+# cat=IT; type=password; label=Client Secret override IT
+it_clientSecret =
+
+# cat=IT; type=string; label=Callback path override IT
+it_callbackPath =
+
+
+# cat=NL; type=string; label=Client ID override NL
+nl_clientId =
+
+# cat=NL; type=password; label=Client Secret override NL
+nl_clientSecret =
+
+# cat=NL; type=string; label=Callback path override NL
+nl_callbackPath =
 
 # cat=intern; type=string; label=Token-Endpoint
 tokenEndpoint = https://auth.doccheck.com/token

@@ -1,3 +1,65 @@
-.doccheck-access-login-button{background:rgb(204, 0, 51);  border-radius:8px; display:inline-flex; color:#fff; text-decoration:none; font-family:Arial, Helvetica, sans-serif; font-size:25px; align-items: center;}
-.doccheck-access-login-button > span{padding:4px 15px;}
-.doccheck-access-black{color:#000;}
+.doccheck-access_cont{text-align:left;}
+.doccheck-access_cont.align_right{text-align:right;}
+.doccheck-access_cont.align_center{text-align:center;}
+.doccheck-access-login-button {
+    background: rgb(204, 0, 51);
+    transition: transform 150ms ease-out;
+    border-radius: clamp(0.375rem, 0.125rem + 1vw, 0.5rem) /* @ 400 = 6px | @ 600 = 8px */;
+    overflow: hidden;
+    display: inline-flex;
+    color: #fff;
+    text-decoration: none;
+    font-family: "Arial", "Helvetica", sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.9375rem, 0.4375rem + 2vw, 1.1875rem) /* @ 400 = 15px | @ 600 = 19px */;
+    align-items: center;
+}
+
+.doccheck-access-login-button:hover {
+    transform: scale(1.04);
+}
+
+.doccheck-access-login-button > span.dc_access_buttonText {
+    padding: 5px 15px 4px 10px;
+}
+
+.doccheck-access-black {
+    color: #000;
+}
+
+.dc_access_buttonImg {
+    flex: 0 0 auto;
+    max-width: clamp(1.8125rem, 1.3125rem + 2vw, 2.0625rem) /* @ 400 = 29px | @ 600 = 33px */;
+}
+
+.dc_access_buttonImg > img {
+    width: 100%;
+    vertical-align: bottom;
+}
+
+.doccheck-access-login-button.btnsize_small {
+    font-size: 14px;
+    border-radius: 6px;
+}
+
+.doccheck-access-login-button.btnsize_small .dc_access_buttonImg {
+    max-width: 25px;
+}
+
+.doccheck-access-login-button.btnsize_small > span.dc_access_buttonText {
+    padding: 5px 15px 4px 10px;
+}
+
+.doccheck-access-login-button.btnsize_big {
+    font-size: clamp(1.1875rem, 0.3125rem + 3.5vw, 1.625rem) /* @ 400 = 19px | @ 600 = 26px */;
+    border-radius: clamp(0.375rem, 0rem + 1.5vw, 0.5625rem) /* @ 400 = 6px | @ 600 = 9px */;
+}
+
+.doccheck-access-login-button.btnsize_big .dc_access_buttonImg {
+    max-width: clamp(2.25rem, 1.25rem + 4vw, 2.75rem) /* @ 400 = 33px | @ 600 = 44px */;
+}
+
+.doccheck-access-login-button.btnsize_big > span.dc_access_buttonText {
+    padding: 5px clamp(0.9375rem, 0.3125rem + 2.5vw, 1.25rem) /* @ 400 = 15px | @ 600 = 20px */ 4px clamp(0.625rem, 0rem + 2.5vw, 0.9375rem) /* @ 400 = 10px | @ 600 = 15px */;
+}
+

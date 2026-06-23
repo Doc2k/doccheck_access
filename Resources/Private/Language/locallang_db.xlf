@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="messages" date="2026-06-23T00:00:00Z" product-name="doccheck_access">
+        <body>
+            <trans-unit id="tt_content.CType.doccheckaccess_login">
+                <source>DocCheck Login</source>
+            </trans-unit>
+            <trans-unit id="tt_content.CType.doccheckaccess_error_message">
+                <source>DocCheck Error Message</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_button_label">
+                <source>Button Label (optional)</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_success_pid">
+                <source>Success Page</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize">
+                <source>Login Button Size</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.default">
+                <source>Medium (default)</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.small">
+                <source>Small</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.big">
+                <source>Large</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign">
+                <source>Login Button Alignment</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.left">
+                <source>Left (default)</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.center">
+                <source>Centered</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.right">
+                <source>Right</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="nl" datatype="plaintext" original="messages" date="2026-06-23T00:00:00Z" product-name="doccheck_access">
+        <body>
+            <trans-unit id="tt_content.CType.doccheckaccess_login">
+                <source>DocCheck Login</source>
+                <target>DocCheck login</target>
+            </trans-unit>
+            <trans-unit id="tt_content.CType.doccheckaccess_error_message">
+                <source>DocCheck Error Message</source>
+                <target>DocCheck foutmelding</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_button_label">
+                <source>Button Label (optional)</source>
+                <target>Knoplabel (optioneel)</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_success_pid">
+                <source>Success Page</source>
+                <target>Succespagina</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize">
+                <source>Login Button Size</source>
+                <target>Grootte van de login-knop</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.default">
+                <source>Medium (default)</source>
+                <target>Gemiddeld (standaard)</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.small">
+                <source>Small</source>
+                <target>Klein</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.big">
+                <source>Large</source>
+                <target>Groot</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign">
+                <source>Login Button Alignment</source>
+                <target>Uitlijning van de login-knop</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.left">
+                <source>Left (default)</source>
+                <target>Links (standaard)</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.center">
+                <source>Centered</source>
+                <target>Gecentreerd</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.right">
+                <source>Right</source>
+                <target>Rechts</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

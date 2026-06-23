@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="it" datatype="plaintext" original="messages" date="2026-06-23T00:00:00Z" product-name="doccheck_access">
+        <body>
+            <trans-unit id="tt_content.CType.doccheckaccess_login">
+                <source>DocCheck Login</source>
+                <target>Login DocCheck</target>
+            </trans-unit>
+            <trans-unit id="tt_content.CType.doccheckaccess_error_message">
+                <source>DocCheck Error Message</source>
+                <target>Messaggio di errore DocCheck</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_button_label">
+                <source>Button Label (optional)</source>
+                <target>Etichetta del pulsante (opzionale)</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_success_pid">
+                <source>Success Page</source>
+                <target>Pagina di successo</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize">
+                <source>Login Button Size</source>
+                <target>Dimensione del pulsante di login</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.default">
+                <source>Medium (default)</source>
+                <target>Medio (predefinito)</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.small">
+                <source>Small</source>
+                <target>Piccolo</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonsize.big">
+                <source>Large</source>
+                <target>Grande</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign">
+                <source>Login Button Alignment</source>
+                <target>Allineamento del pulsante di login</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.left">
+                <source>Left (default)</source>
+                <target>Sinistra (predefinito)</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.center">
+                <source>Centered</source>
+                <target>Centrato</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_doccheckaccess_buttonalign.right">
+                <source>Right</source>
+                <target>Destra</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

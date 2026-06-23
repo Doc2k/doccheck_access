@@ -4,6 +4,9 @@ tt_content.doccheckaccess_login {
   templateRootPaths {
     10 = EXT:doccheck_access/Resources/Private/Templates/ContentElements/
   }
+  partialRootPaths {
+    10 = EXT:doccheck_access/Resources/Private/Partials/ContentElements/
+  }
 }
 
 tt_content.doccheckaccess_error_message = COA_INT

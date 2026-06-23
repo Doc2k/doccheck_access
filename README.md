@@ -13,6 +13,7 @@ The implementation is intentionally lightweight and avoids unnecessary complexit
 * DocCheck OAuth authentication
 * TYPO3 frontend user login
 * Language-aware login and redirect handling
+* Language-specific DocCheck client overrides
 * Configurable success and failure pages
 * Session-based error handling
 * Content elements for login and error output
@@ -49,7 +50,7 @@ Open the TYPO3 Extension Configuration and provide the required DocCheck credent
 ### Required Settings
 
 | Setting           | Description                                    |
-| ----------------- | ---------------------------------------------- |
+|-------------------|------------------------------------------------|
 | Client ID         | DocCheck OAuth Client ID                       |
 | Client Secret     | DocCheck OAuth Client Secret                   |
 | Callback URL      | Registered DocCheck callback URL               |
@@ -59,12 +60,66 @@ Open the TYPO3 Extension Configuration and provide the required DocCheck credent
 ### Optional Settings
 
 | Setting                 | Description                            |
-| ----------------------- | -------------------------------------- |
+|-------------------------|----------------------------------------|
 | Success Page            | Global fallback success page           |
 | Frontend User Group UID | Reserved for future use                |
 | Token Endpoint          | Alternative token endpoint if required |
 
 A success page can be configured globally or individually on each login content element. The content element configuration always takes precedence.
+
+### Multi-Language Installations
+
+By default, the extension uses a single DocCheck client configuration for all languages.
+
+This is sufficient for TYPO3 installations where all languages are served from the same domain, for example:
+
+```text
+https://yourdomain.com/
+https://yourdomain.com/de/
+https://yourdomain.com/fr/
+```
+
+In this scenario, the default configuration values are used for all languages.
+
+If your TYPO3 installation uses separate domains per language, additional DocCheck clients are required because OAuth callback URLs are domain-specific. Example:
+
+```text
+https://yourdomain.de/
+https://yourdomain.com/
+https://yourdomain.fr/
+```
+
+For these setups, language-specific overrides can be configured in the Extension Configuration:
+
+```text
+de_clientId
+de_clientSecret
+de_callbackPath
+
+en_clientId
+en_clientSecret
+en_callbackPath
+
+fr_clientId
+fr_clientSecret
+fr_callbackPath
+
+nl_clientId
+nl_clientSecret
+nl_callbackPath
+
+it_clientId
+it_clientSecret
+it_callbackPath
+
+es_clientId
+es_clientSecret
+es_callbackPath
+```
+
+If a language-specific override is configured, it takes precedence over the default value.
+
+If no override is configured, the extension automatically falls back to the default `clientId`, `clientSecret` and `callbackPath`.
 
 ## Content Elements
 

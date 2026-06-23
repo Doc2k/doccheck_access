@@ -50,6 +50,9 @@ final class CallbackMiddleware implements MiddlewareInterface
         $languageId = isset($sessionData['languageId']) && is_numeric($sessionData['languageId'])
             ? (int)$sessionData['languageId']
             : 0;
+        $languageCode = isset($sessionData['languageCode']) && is_scalar($sessionData['languageCode'])
+            ? strtolower(trim((string)$sessionData['languageCode']))
+            : '';
 
         if ($code === '') {
             $this->storeErrorCode($request, 'missing_code');
@@ -58,9 +61,14 @@ final class CallbackMiddleware implements MiddlewareInterface
         }
 
         try {
+            $configuration = $this->configurationService->getAll();
+            $configuration['clientId'] = $this->configurationService->getClientId($languageCode);
+            $configuration['clientSecret'] = $this->configurationService->getClientSecret($languageCode);
+            $configuration['callbackPath'] = $this->configurationService->getCallbackPath($languageCode);
+
             $tokenResponse = $this->docCheckApiService->exchangeCodeForToken(
                 $code,
-                $this->configurationService->getAll()
+                $configuration
             );
         } catch (\Throwable $exception) {
             $this->storeErrorCode($request, 'token_exchange_failed');
@@ -72,8 +80,6 @@ final class CallbackMiddleware implements MiddlewareInterface
             $tokenResponse,
             $request
         );
-
-
 
         if (!$loginSucceeded) {
             $this->storeErrorCode($request, 'frontend_login_failed');

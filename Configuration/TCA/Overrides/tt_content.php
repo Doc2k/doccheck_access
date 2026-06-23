@@ -7,19 +7,19 @@ defined('TYPO3') or die();
 call_user_func(static function (): void {
     $additionalColumns = [
         'tx_doccheckaccess_button_label' => [
-            'exclude' => true,
-            'label' => 'Button Label',
+            'exclude' => 0,
+            'label' => 'LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_button_label',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'max' => 255,
                 'eval' => 'trim',
-                'default' => 'Login with DocCheck',
+                'default' => '',
             ],
         ],
         'tx_doccheckaccess_success_pid' => [
-            'exclude' => true,
-            'label' => 'Success Page',
+            'exclude' => 0,
+            'label' => 'LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_success_pid',
             'config' => [
                 'type' => 'group',
                 'allowed' => 'pages',
@@ -29,12 +29,38 @@ call_user_func(static function (): void {
                 'default' => 0,
             ],
         ],
+        'tx_doccheckaccess_buttonsize' => [
+            'exclude' => 0,
+            'label' => 'LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonsize',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonsize.default', 'default'],
+                    ['LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonsize.small', 'small'],
+                    ['LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonsize.big', 'big'],
+                ],
+            ],
+        ],
+        'tx_doccheckaccess_buttonalign' => [
+            'exclude' => 0,
+            'label' => 'LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonalign',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonalign.left', ''],
+                    ['LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonalign.center', 'center'],
+                    ['LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.tx_doccheckaccess_buttonalign.right', 'right'],
+                ],
+            ],
+        ],
     ];
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tt_content', $additionalColumns);
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
         [
-            'DocCheck Login',
+            'LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.CType.doccheckaccess_login',
             'doccheckaccess_login',
             'mimetypes-x-content-login',
         ],
@@ -43,7 +69,7 @@ call_user_func(static function (): void {
     );
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
         [
-            'DocCheck Error Message',
+            'LLL:EXT:doccheck_access/Resources/Private/Language/locallang_db.xlf:tt_content.CType.doccheckaccess_error_message',
             'doccheckaccess_error_message',
             'mimetypes-x-content-text',
         ],
@@ -56,6 +82,8 @@ call_user_func(static function (): void {
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
                 --palette--;;general,
                 --palette--;;headers,
+                tx_doccheckaccess_buttonsize,
+                tx_doccheckaccess_buttonalign,
                 tx_doccheckaccess_button_label,
                 tx_doccheckaccess_success_pid,
             --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,

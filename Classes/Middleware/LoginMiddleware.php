@@ -90,6 +90,9 @@ final class LoginMiddleware implements MiddlewareInterface
         ]);
 
         $configuration = $this->configurationService->getAll();
+        $configuration['clientId'] = $this->configurationService->getClientId($docCheckLanguage);
+        $configuration['clientSecret'] = $this->configurationService->getClientSecret($docCheckLanguage);
+        $configuration['callbackPath'] = $this->configurationService->getCallbackPath($docCheckLanguage);
         $configuration['authorizationEndpoint'] = 'https://auth.doccheck.com/' . $docCheckLanguage . '/authorize';
 
         $authorizationUrl = $this->docCheckApiService->buildAuthorizationUrl(

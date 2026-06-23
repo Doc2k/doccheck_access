@@ -15,19 +15,19 @@ final class ConfigurationService
         $this->extensionConfiguration = $extensionConfiguration;
     }
 
-    public function getClientId(): string
+    public function getClientId(?string $language = null): string
     {
-        return $this->getStringValue('clientId');
+        return $this->getLanguageAwareStringValue('clientId', $language);
     }
 
-    public function getClientSecret(): string
+    public function getClientSecret(?string $language = null): string
     {
-        return $this->getStringValue('clientSecret');
+        return $this->getLanguageAwareStringValue('clientSecret', $language);
     }
 
-    public function getCallbackPath(): string
+    public function getCallbackPath(?string $language = null): string
     {
-        return $this->getStringValue('callbackPath');
+        return $this->getLanguageAwareStringValue('callbackPath', $language);
     }
 
     public function getSuccessPid(): int
@@ -50,26 +50,31 @@ final class ConfigurationService
         return $this->getIntegerValue('frontendUserGroupUid');
     }
 
-    public function assertRequiredAdminConfiguration(): void
+    public function getTokenEndpoint(): string
     {
-        if (trim($this->getClientId()) === '') {
+        return $this->getStringValue('tokenEndpoint', 'https://auth.doccheck.com/token');
+    }
+
+    public function assertRequiredAdminConfiguration(?string $language = null): void
+    {
+        if (trim($this->getClientId($language)) === '') {
             throw new \RuntimeException(
                 'DocCheck Access configuration error: clientId is missing.',
                 1719001001
             );
         }
 
-        if (trim($this->getClientSecret()) === '') {
+        if (trim($this->getClientSecret($language)) === '') {
             throw new \RuntimeException(
                 'DocCheck Access configuration error: clientSecret is missing.',
                 1719001002
             );
         }
 
-        $redirectUri = trim($this->getConfiguredRedirectUri());
+        $redirectUri = trim($this->getConfiguredRedirectUri($language));
         if ($redirectUri === '' || !$this->isValidAbsoluteHttpUri($redirectUri)) {
             throw new \RuntimeException(
-                'DocCheck Access configuration error: redirectUri or callbackPath is missing or invalid.',
+                'DocCheck Access configuration error: callbackPath is missing or invalid.',
                 1719001003
             );
         }
@@ -115,6 +120,24 @@ final class ConfigurationService
         return is_array($configuration) ? $configuration : [];
     }
 
+    private function getLanguageAwareStringValue(
+        string $key,
+        ?string $language = null,
+        string $default = ''
+    ): string {
+        $language = strtolower(trim((string)$language));
+
+        if ($language !== '') {
+            $languageValue = $this->getStringValue($language . '_' . $key);
+
+            if (trim($languageValue) !== '') {
+                return trim($languageValue);
+            }
+        }
+
+        return trim($this->getStringValue($key, $default));
+    }
+
     private function getStringValue(string $key, string $default = ''): string
     {
         $value = $this->getAll()[$key] ?? $default;
@@ -129,9 +152,9 @@ final class ConfigurationService
         return is_numeric($value) ? (int)$value : $default;
     }
 
-    private function getConfiguredRedirectUri(): string
+    private function getConfiguredRedirectUri(?string $language = null): string
     {
-        return $this->getStringValue('callbackPath');
+        return $this->getCallbackPath($language);
     }
 
     private function isValidAbsoluteHttpUri(string $uri): bool
