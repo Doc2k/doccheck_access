@@ -71,6 +71,15 @@ final class CallbackMiddleware implements MiddlewareInterface
                 $configuration
             );
         } catch (\Throwable $exception) {
+            error_log('[doccheck_access] token_exchange_failed: ' . $exception->getMessage());
+
+            error_log('[doccheck_access] token_exchange_config: ' . json_encode([
+                    'languageCode' => $languageCode,
+                    'clientId' => $configuration['clientId'] ?? '',
+                    'callbackPath' => $configuration['callbackPath'] ?? '',
+                    'tokenEndpoint' => $configuration['tokenEndpoint'] ?? '',
+                ]));
+
             $this->storeErrorCode($request, 'token_exchange_failed');
 
             return new RedirectResponse($this->buildPageRedirectUrl($this->configurationService->getFailurePid(), $languageId), 303);

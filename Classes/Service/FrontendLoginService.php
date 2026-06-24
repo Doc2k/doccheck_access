@@ -10,6 +10,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use Psr\Http\Message\ServerRequestInterface;
 use Doc2k\DoccheckAccess\Service\ConfigurationService;
+use Doctrine\DBAL\ParameterType;
 
 final class FrontendLoginService
 {
@@ -73,15 +74,15 @@ final class FrontendLoginService
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($userUid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($userUid, ParameterType::INTEGER)
                 ),
                 $queryBuilder->expr()->eq(
                     'disable',
-                    $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)
                 ),
                 $queryBuilder->expr()->eq(
                     'deleted',
-                    $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)
                 )
             )
             ->executeQuery()

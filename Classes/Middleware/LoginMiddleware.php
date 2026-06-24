@@ -16,6 +16,7 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use Doctrine\DBAL\ParameterType;
 
 final class LoginMiddleware implements MiddlewareInterface
 {
@@ -50,10 +51,7 @@ final class LoginMiddleware implements MiddlewareInterface
             ? $language->getLanguageId()
             : 0;
 
-        $languageCode = $language instanceof SiteLanguage
-            ? $language->getTwoLetterIsoCode()
-            : 'en';
-
+        $languageCode = $this->resolveDocCheckLanguageFromSiteLanguage($language);
         $docCheckLanguage = in_array($languageCode, ['de', 'en', 'fr', 'it', 'nl', 'es'], true)
             ? $languageCode
             : 'en';
@@ -114,7 +112,7 @@ final class LoginMiddleware implements MiddlewareInterface
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($contentElementUid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($contentElementUid, ParameterType::INTEGER)
                 ),
                 $queryBuilder->expr()->eq(
                     'CType',
@@ -187,5 +185,23 @@ final class LoginMiddleware implements MiddlewareInterface
         } catch (\Throwable $e) {
             return '/?id=' . $pageUid . ($languageId > 0 ? '&L=' . $languageId : '');
         }
+    }
+
+    private function resolveDocCheckLanguageFromSiteLanguage($siteLanguage): string
+    {
+        if (method_exists($siteLanguage, 'getTwoLetterIsoCode')) {
+            return strtolower((string)$siteLanguage->getTwoLetterIsoCode());
+        }
+
+        if (method_exists($siteLanguage, 'getLocale')) {
+            $locale = (string)$siteLanguage->getLocale();
+            $language = strtolower(substr($locale, 0, 2));
+
+            if ($language !== '') {
+                return $language;
+            }
+        }
+
+        return 'en';
     }
 }
