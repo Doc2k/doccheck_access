@@ -42,24 +42,21 @@ final class FrontendLoginService
 
         $frontendUser->createUserSession($userRecord);
         $frontendUser->user = $userRecord;
-        $frontendUser->fetchGroupData();
+        $this->fetchFrontendUserGroupData($frontendUser, $request);
 
         return true;
     }
 
-    private function getFrontendUser(): ?FrontendUserAuthentication
+    private function fetchFrontendUserGroupData(
+        FrontendUserAuthentication $frontendUser,
+        ServerRequestInterface $request
+    ): void
     {
-        $typoScriptFrontendController = $GLOBALS['TSFE'] ?? null;
-
-        if (
-            is_object($typoScriptFrontendController)
-            && isset($typoScriptFrontendController->fe_user)
-            && $typoScriptFrontendController->fe_user instanceof FrontendUserAuthentication
-        ) {
-            return $typoScriptFrontendController->fe_user;
+        try {
+            $frontendUser->fetchGroupData($request);
+        } catch (\ArgumentCountError $exception) {
+            $frontendUser->fetchGroupData();
         }
-
-        return null;
     }
 
     /**
