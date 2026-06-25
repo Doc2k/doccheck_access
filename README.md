@@ -2,11 +2,13 @@
 
 DocCheck Access is a lightweight TYPO3 extension that provides DocCheck OAuth authentication for frontend access.
 
-The extension was created as a simple replacement for the former DocCheck Access Basic integration and focuses on one specific use case:
+The extension was created as a replacement for the former DocCheck Access Basic integration and focuses on one specific use case:
 
 > Authenticate users via DocCheck and grant access to protected TYPO3 content using a predefined frontend user.
 
 The implementation is intentionally lightweight and avoids unnecessary complexity. It uses TYPO3 frontend sessions, PSR-15 middlewares and standard TYPO3 content elements without requiring Extbase plugins or backend modules.
+
+For detailed installation, administration and developer documentation, see the `Documentation/` directory.
 
 ## Features
 
@@ -17,7 +19,7 @@ The implementation is intentionally lightweight and avoids unnecessary complexit
 * Configurable success and failure pages
 * Session-based error handling
 * Content elements for login and error output
-* TYPO3 11.5 LTS to TYPO3 14 compatibility
+* TYPO3 11.5 LTS to TYPO3 14.3 LTS compatibility
 
 ## Scope and Limitations
 
@@ -43,6 +45,8 @@ composer require doc2k/doccheck-access
 
 Activate the extension in TYPO3 and execute the database compare to add the required database fields.
 
+For a complete installation guide, see `Documentation/Installation.md`.
+
 ## Configuration
 
 Open the TYPO3 Extension Configuration and provide the required DocCheck credentials and TYPO3 settings.
@@ -50,7 +54,7 @@ Open the TYPO3 Extension Configuration and provide the required DocCheck credent
 ### Required Settings
 
 | Setting           | Description                                    |
-|-------------------|------------------------------------------------|
+| ----------------- | ---------------------------------------------- |
 | Client ID         | DocCheck OAuth Client ID                       |
 | Client Secret     | DocCheck OAuth Client Secret                   |
 | Callback URL      | Registered DocCheck callback URL               |
@@ -60,7 +64,7 @@ Open the TYPO3 Extension Configuration and provide the required DocCheck credent
 ### Optional Settings
 
 | Setting                 | Description                            |
-|-------------------------|----------------------------------------|
+| ----------------------- | -------------------------------------- |
 | Success Page            | Global fallback success page           |
 | Frontend User Group UID | Reserved for future use                |
 | Token Endpoint          | Alternative token endpoint if required |
@@ -79,17 +83,7 @@ https://yourdomain.com/de/
 https://yourdomain.com/fr/
 ```
 
-In this scenario, the default configuration values are used for all languages.
-
-If your TYPO3 installation uses separate domains per language, additional DocCheck clients are required because OAuth callback URLs are domain-specific. Example:
-
-```text
-https://yourdomain.de/
-https://yourdomain.com/
-https://yourdomain.fr/
-```
-
-For these setups, language-specific overrides can be configured in the Extension Configuration:
+If separate domains are used per language, configure language-specific OAuth clients and callback URLs:
 
 ```text
 de_clientId
@@ -117,9 +111,7 @@ es_clientSecret
 es_callbackPath
 ```
 
-If a language-specific override is configured, it takes precedence over the default value.
-
-If no override is configured, the extension automatically falls back to the default `clientId`, `clientSecret` and `callbackPath`.
+Configured language-specific values automatically override the global configuration.
 
 ## Content Elements
 
@@ -132,6 +124,8 @@ Available fields:
 * Header
 * Button Label
 * Success Page
+* Button Size
+* Button Alignment
 * Standard TYPO3 Appearance, Access and Language settings
 
 ### DocCheck Error Message
@@ -143,26 +137,18 @@ The content element is rendered uncached to ensure session-based messages are di
 ## Authentication Flow
 
 1. A visitor clicks the DocCheck login button.
-2. TYPO3 stores the current language and target page in the frontend session.
+2. TYPO3 stores the required authentication context in the frontend session.
 3. The visitor is redirected to DocCheck.
 4. DocCheck redirects back to the configured callback URL.
 5. TYPO3 exchanges the authorization code for an access token.
 6. The configured frontend user is logged in.
 7. The visitor is redirected to the configured success page.
 
-If the authentication process fails, the visitor is redirected to the configured failure page.
+If authentication fails, the visitor is redirected to the configured failure page.
 
 ## Error Handling
 
-Configuration problems are treated as installation errors and will raise a `RuntimeException`.
-
-Examples include:
-
-* missing Client ID
-* missing Client Secret
-* missing Callback URL
-* invalid frontend user configuration
-* missing failure page
+Configuration problems are treated as installation errors and raise a `RuntimeException`.
 
 Authentication-related problems are stored in the TYPO3 frontend session and can be displayed using the **DocCheck Error Message** content element.
 
@@ -176,6 +162,31 @@ Current error codes:
 
 ## Technical Notes
 
-The extension stores TYPO3-specific context such as language and target page information in the frontend session during the authentication process.
+The extension stores TYPO3-specific context, such as language and target page information, in the frontend session during the authentication process.
 
 No TYPO3-specific state information is transmitted to DocCheck.
+
+## Documentation
+
+Additional documentation is available in the `Documentation/` directory:
+
+* About
+* Installation
+* For Administrators
+* For Editors
+* For Contributors
+
+## Contributing
+
+Contributions are welcome.
+
+If you find a bug, have an improvement or would like to contribute support for future TYPO3 versions, feel free to open an issue or submit a pull request.
+
+Please try to keep contributions compatible with all currently supported TYPO3 versions whenever possible.
+
+## License
+
+This extension is licensed under the **GNU General Public License v3.0 or later (GPL-3.0-or-later)**.
+
+See the `LICENSE` file for the full license text.
+    
